@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -25,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
@@ -61,6 +63,9 @@ public class DataActivity extends AppCompatActivity {
             StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
+
+                    Toast.makeText(getApplicationContext(),response,Toast.LENGTH_SHORT).show();
+
                     Log.i("LOG_RESPONSE", response);
                 }
             }, new Response.ErrorListener() {
@@ -76,12 +81,7 @@ public class DataActivity extends AppCompatActivity {
 
                 @Override
                 public byte[] getBody() throws AuthFailureError {
-                    try {
-                        return mRequestBody == null ? null : mRequestBody.getBytes("utf-8");
-                    } catch (UnsupportedEncodingException uee) {
-                        VolleyLog.wtf("Unsupported Encoding while trying to get the bytes of %s using %s", mRequestBody, "utf-8");
-                        return null;
-                    }
+                    return mRequestBody.getBytes(StandardCharsets.UTF_8);
                 }
 
                 @Override
@@ -98,34 +98,6 @@ public class DataActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
-
-        /*RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonArrayRequest jsonObjReq = new JsonArrayRequest(Request.Method.POST, url, null, new Response.Listener<JSONArray>() {
-
-            @Override
-            public void onResponse(JSONArray jsonArray) {
-
-                try {
-
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
-        requestQueue.add(jsonObjReq);
-
-         */
 
     }
 }
